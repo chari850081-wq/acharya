@@ -174,8 +174,8 @@ def calculate_horoscope(year, month, day, hour, minute, lat, lon):
     }
 
 # --- 3. UI LAYOUT ---
-st.markdown("<h1 style='text-align: center; color: #ff4b4b;'>🕉️ ఆచార్య అడ్వాన్స్డ్ ఆల్ ఇన్ వన్ ఆస్ట్రో</h1>", unsafe_html=True)
-st.markdown("<p style='text-align: center;'>రాశి (D1), నవాంశ (D9), 5 స్థాయిల దశలు మరియు గ్రహ బలాల సంపూర్ణ విశ్లేషణ.</p>", unsafe_html=True)
+st.markdown("<h1 style='text-align: center; color: #ff4b4b;'>🕉️ ఆచార్య అడ్వాన్స్డ్ ఆల్ ఇన్ వన్ ఆస్ట్రో</h1>", unsafe_allow_html=True)
+st.markdown("<p style='text-align: center;'>రాశి (D1), నవాంశ (D9), 5 స్థాయిల దశలు మరియు గ్రహ బలాల సంపూర్ణ విశ్లేషణ.</p>", unsafe_allow_html=True)
 
 col1, col2 = st.columns([1, 1])
 with col1:
@@ -214,7 +214,7 @@ if st.button("🔮 జాతక ఫలితాలను గణించు", ty
                     grid_map = [[11, 0, 1, 2], [10, -1, -1, 3], [9, -1, -1, 4], [8, 7, 6, 5]]
                     
                     def draw_chart(title, chart_data):
-                        st.markdown(f"<h3 style='text-align:center;'>{title}</h3>", unsafe_html=True)
+                        st.markdown(f"<h3 style='text-align:center;'>{title}</h3>", unsafe_allow_html=True)
                         for row in grid_map:
                             cols = st.columns(4)
                             for c_idx, r_idx in enumerate(row):
