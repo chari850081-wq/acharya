@@ -1,116 +1,64 @@
-import datetime
-import streamlit as st
-import swisseph as swe
-# తెలుగు రాశులు మరియు నక్షత్రాల పేర్లు
-RASHIS = [
-    "మేషం", "వృషభం", "మిథునం", "కర్కాటకం", "సింహం", "కన్య",
-    "తుల", "వృశ్చికం", "ధనుస్సు", "మకరం", "కుంభం", "మీనం"
-]
-
-NAKSHATRAS = [
-    "అశ్విని", "భరణి", "కృత్తిక", "రోహిణి", "మృగశిర", "ఆరుద్ర", "పునర్వసు", "పుష్యమి", "ఆశ్లేష",
-    "మఖ", "పూర ఫాల్గుణి (పుబ్బ)", "ఉత్తర ఫాల్గుణి (ఉత్తర)", "హస్త", "చిత్ర", "స్వాతి", "విశాఖ", "అనూరాధ", "జ్యేష్ఠ",
-    "మూల", "పూర్వాషాఢ", "ఉత్తరాషాఢ", "శ్రవణం", "ధనిష్ఠ", "శతభిషం", "పూర్వాభాద్ర", "ఉత్తరాభాద్ర", "రేవతి"
-]
-
-def calculate_horoscope(year, month, day, hour, minute, lat, lon):
-    # IST నుండి UTC కి మార్చడం (-5:30 గంటలు)
-    local_time = datetime.datetime(year, month, day, hour, minute)
-    utc_time = local_time - datetime.timedelta(hours=5, minutes=30)
-    utc_hour = utc_time.hour + utc_time.minute / 60.0
-    
-    # జూలియన్ డే గణన
-    jd = swe.julday(utc_time.year, utc_time.month, utc_time.day, utc_hour)
-    swe.set_sid_mode(swe.SIDM_LAHIRI) # లాహిరి అయనాంశ
-    
-    # లగ్న గణన
-    cusps, ascmc = swe.houses_ex(jd, lat, lon, b'P', swe.FLG_SIDEREAL)
-    lagna_idx = int(ascmc[0] / 30)
-    
-    # చంద్రుడి స్థానం (రాశి, నక్షత్రం)
-    res, ret = swe.calc_ut(jd, swe.MOON, swe.FLG_SIDEREAL)
-    moon_degree = res[0]
-    
-    rashi_idx = int(moon_degree / 30)
-    nakshatra_pos = moon_degree / (360 / 27)
-    nakshatra_idx = int(nakshatra_pos)
-    pada = int((nakshatra_pos - nakshatra_idx) * 4) + 1
-    
-    return {
-        "లగ్నం": RASHIS[lagna_idx],
-        "రాశి": RASHIS[rashi_idx],
-        "నక్షత్రం": NAKSHATRAS[nakshatra_idx],
-        "పాదం": pada
-    }
-st.title("ఆచార్య అస్ట్రో యాప్")
-st.write("మీ జాతక చక్రం మరియు జ్యోతిష్య వివరాల కోసం ఈ యాప్ ఉపయోగపడు
-import datetime
-
-# యాప్ టైటిల్ మరియు హెడర్
-st.set_page_config(page_title="ఆచార్య ఆస్ట్రో యాప్", layout="centered")
-st.title("🔮 ఆచార్య ఆస్ట్రో యాప్ (Acharya Astro App)")
-st.write("మీ జాతక చక్రం, రాశి, నామాంశ మరియు దశల వివరాలు ఇక్కడ చూసుకోవచ్చు.")
+# --- 3. స్ట్రీమ్‌లిట్ స్క్రీన్ డిజైన్ (UI) ---
+st.set_page_config(page_title="ఆచార్య అడ్వాన్స్డ్ ఆస్ట్రో", layout="wide")
+st.title("🕉️ ఆచార్య అడ్వాన్స్డ్ ఆస్ట్రో యాప్")
+st.write("ఇక్కడ మీ పూర్తి జాతక చక్రం, రాశి-నక్షత్ర వివరాలు మరియు వింశోత్తరి దశలను ఖచ్చితంగా తెలుసుకోవచ్చు.")
 
 st.markdown("---")
 
-# వివరాలు నమోదు చేసే సెక్షన్
-st.header("👤 మీ వివరాలు నమోదు చేయండి")
-
-# పేరు, పుట్టిన తేదీ, సమయం ఇన్‌పుట్స్
-name = st.text_input("మీ పేరు (Name):")
-dob = st.date_input("పుట్టిన తేదీ (Date of Birth):", min_value=datetime.date(1900, 1, 1))
-tob = st.time_input("పుట్టిన సమయం (Time of Birth):")
-place = st.text_input("పుట్టిన ఊరు (Place of Birth):")
+# ఇన్‌పుట్ ఫీల్డ్‌లు
+col_in1, col_in2 = st.columns(2)
+with col_in1:
+    name = st.text_input("👤 మీ పేరు (Name):")
+    dob = st.date_input("📅 పుట్టిన తేదీ (Date of Birth):", min_value=datetime.date(1900, 1, 1))
+    tob = st.time_input("⏰ పుట్టిన సమయం (Time of Birth):")
+with col_in2:
+    place = st.text_input("📍 పుట్టిన ఊరు (Place of Birth):")
+    latitude = st.number_input("🌐 అక్షాంశం (Latitude - ఉదా: 17.3850)", value=17.3850, format="%.4f")
+    longitude = st.number_input("🌐 రేఖాంశం (Longitude - ఉదా: 78.4867)", value=78.4867, format="%.4f")
 
 st.markdown("---")
 
-# లెక్కించడానికి బటన్
-if st.button("🌟 జాతక చక్రం మరియు దశల వివరాలు చూపించు"):
-    if name:
-        st.success(f"ధన్యవాదాలు {name} గారు! మీ వివరాలు విజయవంతంగా నమోదయ్యాయి.")
-        
-        # 1. జాతక చక్రం సెక్షన్
-        st.subheader("📊 1. జాతక చక్రం (Horoscope Chart)")
-        col1, col2 = st.columns(2)
-        with col1:
-            st.info("📌 రాశి చక్రం (Rasi Kundali)")
-            st.write("• లగ్నం: [గణన జరుగుతోంది...]")
-            st.write("• రాశి: [గణన జరుగుతోంది...]")
-        with col2:
-            st.info("📌 నామాంశ చక్రం (Navamsha Chart)")
-            st.write("• నక్షత్రం: [గణన జరుగుతోంది...]")
-            st.write("• పాదం: [గణన జరుగుతోంది...]")
-
-        st.markdown("---")
-
-        # 2. దశల సెక్షన్
-        st.subheader("⏳ 2. దశల వీక్షణ (Dasha Details)")
-        st.warning("ప్రస్తుత మరియు రాబోయే దశల వివరాలు:")
-        
-        # టేబుల్ రూపంలో దశల వివరాలు
-        st.write("• మహాదశ (Maha Dasha): [గణన జరుగుతోంది...]")
-        st.write("• అంతర్దశ (Antardasha): [గణన జరుగుతోంది...]")
-        st.write("• విదశ / ప్రత్యంతర్దశ (Pratyantar Dasha): [గణన జరుగుతోంది...]")
-        st.write("• సూక్ష్మ దశ (Sukshma Dasha): [గణన జరుగుతోంది...]")
-        
-# మీ యాప్‌లోని బటన్ కోడ్ లోపల ఇలా మార్చండి:
-if st.button("జాతకం లెక్కించు"):
-    with st.spinner("జాతక గణన జరుగుతోంది... దయచేసి వేచి ఉండండి..."):
-        try:
-            # ఇక్కడ మీ యాప్ లోని Input Variables (తేదీ, సమయం, Lat, Lon) పేర్లు ఇవ్వాలి
-            # ఉదాహరణకు యూజర్ ఎంటర్ చేసిన వివరాలను ఈ ఫంక్షన్‌కి పంపుతున్నాం
-            ఫలితాలు = calculate_horoscope(year, month, day, hour, minute, latitude, longitude)
-            
-            # స్క్రీన్ పై అందంగా చూపించడానికి UI బాక్సులు
-            st.success("గణన విజయవంతంగా పూర్తయింది!")
-            
-            col1, col2, col3 = st.columns(3)
-            with col1:
-                st.metric(label="మీ లగ్నం", value=ఫలితాలు["లగ్నం"])
-            with col2:
-                st.metric(label="మీ రాశి", value=ఫలితాలు["రాశి"])
-            with col3:
-                st.metric(label="మీ నక్షత్రం", value=f"{ఫలితాలు['నక్షత్రం']} - {ఫలితాలు['పాదం']} పాదం")
+if st.button("🔮 పూర్తి జాతక చక్రం & దశలు గణించు", type="primary"):
+    if name and place:
+        with st.spinner("గ్రహ స్థానాలు మరియు దశల గణన జరుగుతోంది..."):
+            try:
+                # లెక్కింపు రన్ చేయడం
+                res = calculate_complete_horoscope(
+                    dob.year, dob.month, dob.day, tob.hour, tob.minute, latitude, longitude
+                )
                 
-        except Exception as e:
-            st.error("గణన చేయడంలో తప్పు జరిగింది. వివరాలు సరిగ్గా ఇచ్చారో లేదో చూసుకోండి.")
+                st.success("🎉 గణితం విజయవంతంగా పూర్తయింది!")
+                
+                # --- విభాగాలు చూపించడం ---
+                tab1, tab2, tab3 = st.tabs(["✨ ప్రాథమిక వివరాలు", "📊 జాతక చక్రం (Kundali)", "⏳ వింశోత్తరి దశలు"])
+                
+                with tab1:
+                    st.subheader("📌 మీ జనన నక్షత్ర మరియు రాశి వివరాలు")
+                    c1, c2, c3 = st.columns(3)
+                    c1.metric("🌟 లగ్నం", res["లగ్నం"])
+                    c2.metric("🌙 రాశి", res["రాశి"])
+                    c3.metric("✨ నక్షత్రం", f"{res['నక్షత్రం']} - {res['పాదం']} వ పాదం")
+                    
+                with tab2:
+                    st.subheader("📦 రాశి కుండలి చక్రం (12 ఇళ్లు)")
+                    st.write("కింది బాక్సులలో ఏయే గ్రహాలు ఏ రాశిలో ఉన్నాయో స్పష్టంగా చూడవచ్చు:")
+                    
+                    # 12 రాశుల గ్రిడ్ వ్యూ (అందంగా కనిపించడానికి 4 కాలమ్స్ చొప్పున 3 వరుసలు)
+                    grid_cols = st.columns(4)
+                    for idx, r_name in enumerate(RASHIS):
+                        col_pos = idx % 4
+                        with grid_cols[col_pos]:
+                            planets_in_rashi = ", ".join(res["చక్రం"][idx]) if res["చక్రం"][idx] else "ఖాళీ"
+                            st.info(f"{r_name} \n\n {planets_in_rashi}")
+                            
+                with tab3:
+                    st.subheader("⏳ ప్రస్తుత మరియు రాబోయే వింశోత్తరి మహాదశల వివరాలు")
+                    st.write("ఏ మహాదశ ఏ తేదీతో ముగుస్తుందో కింద ఇవ్వబడింది:")
+                    
+                    # టేబుల్ రూపంలో దశలను చూపించడం
+                    st.table(res["దశలు"])
+                    
+            except Exception as e:
+                st.error(f"గణనలో సాంకేతిక లోపం వచ్చింది: {e}. దయచేసి వివరాలు సరిగ్గా సరిచూసుకోండి.")
+    else:
+        st.warning("⚠️ దయచేసి మీ పేరు మరియు పుట్టిన ఊరి వివరాలను పూర్తిగా నమోదు చేయండి.")
