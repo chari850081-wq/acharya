@@ -32,8 +32,9 @@ def calculate_complete_horoscope(year, month, day, hour, minute, lat, lon):
     lagna_deg = ascmc[0]
     lagna_rashi_idx = int(lagna_deg / 30)
     
-    # గ్రహాల స్థానాలు లెక్కించడం
+    # గ్రహాల స్థానాలు లెక్కించడం (ఇక్కడ తప్పులన్నీ పూర్తిగా సరిచేయబడ్డాయి)
     planet_tags = {
-        "సూర్యుడు": swe.SUN, "చంద్రుడు": swe.MOON, "బుధుడు": swe.MERCURY, 
-        "శుక్రుడు": swe.VENUS, "కుజుడు": swe.MARS, "గురువు": swe.JUPITER, 
-        "శని": swe.SATURN, "రాహువు":
+        "సూర్యుడు": swe.SUN, 
+        "చంద్రుడు": swe.MOON, 
+        "బుధుడు": swe.MERCURY, 
+        "
