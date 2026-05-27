@@ -150,7 +150,7 @@ if calculate_btn:
                                         </div>
                                     </div>
                                     """, 
-                                    unsafe_html=True
+                                    unsafe_allow_html=True
                                 )
                             else:
                                 # మధ్యలో ఉండే ఖాళీ బాక్సుల డిజైన్
