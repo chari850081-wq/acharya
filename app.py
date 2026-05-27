@@ -159,7 +159,7 @@ if calculate_btn:
                                     <div style="min-height: 120px; display: flex; align-items: center; justify-content: center;">
                                     </div>
                                     """, 
-                                    unsafe_html=True
+                                    unsafe_allow_html=True
                                 )
                     st.write("") # రోల మధ్య స్పేస్ కోసం
                     
