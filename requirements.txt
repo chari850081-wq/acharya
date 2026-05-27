@@ -1,1 +1,1 @@
-swisseph
+pyswisseph
