@@ -49,5 +49,6 @@ def calculate_horoscope(year, month, day, hour, minute, lat, lon):
         idx = (idx + 1) % 9
         curr += datetime.timedelta(days=int(DASHA_YEARS[idx] * 365.25))
         timeline.append({"Dasha": GRAHAS[idx], "End Date": curr.strftime("%d-%m-%Y")})
-        
-    return {"lagna": RASHIS
+        out = {"lagna": RASHIS[lagna_idx], "rashi": RASHIS[rashi_idx], "nak": NAKSHATRAS[nak_idx], "pada": pada, "chart": chart, "dasha": timeline}
+    return out
+    return 
