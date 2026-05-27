@@ -221,7 +221,7 @@ if st.button("🔮 జాతక ఫలితాలను గణించు", ty
                                 with cols[c_idx]:
                                     if r_idx != -1:
                                         planets = "<br>".join([f"• {p}" for p in chart_data[r_idx]]) if chart_data[r_idx] else ""
-                                        st.markdown(f"<div style='border:1px solid #ff4b4b; padding:5px; text-align:center; min-height:80px; background:#fff9f9;'><b style='color:#ff4b4b;'>{RASHIS[r_idx]}</b><br><small>{planets}</small></div>", unsafe_html=True)
+                                        st.markdown(f"<div style='border:1px solid #ff4b4b; padding:5px; text-align:center; min-height:80px; background:#fff9f9;'><b style='color:#ff4b4b;'>{RASHIS[r_idx]}</b><br><small>{planets}</small></div>", unsafe_allow_html=True)
                                     else: st.write("")
                     
                     with col_d1: draw_chart("రాశి చక్రం (D1)", res['rashi_chart'])
