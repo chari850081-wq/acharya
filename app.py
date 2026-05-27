@@ -83,7 +83,7 @@ def calculate_horoscope(year, month, day, hour, minute, lat, lon):
 # --- 3. USER INTERFACE (యూజర్ ఇంటర్‌ఫేస్) ---
 st.markdown("<h1 style='text-align: center; color: #ff4b4b;'>🕉️ ఆచార్య అడ్వాన్స్డ్ ఆస్ట్రో యాప్</h1>", unsafe_allow_html=True)
 st.markdown("<p style='text-align: center;'>మీ ఖచ్చితమైన జనన వివరాలను నమోదు చేసి జాతక చక్రం మరియు దశా ఫలాలను తెలుసుకోండి.</p>", unsafe_allow_html=True)
-st.hr()
+st.divider()
 
 # ఇన్‌పుట్ ఫారమ్
 col1, col2 = st.columns(2)
